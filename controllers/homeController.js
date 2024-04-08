@@ -2,10 +2,21 @@ const homeController = require('express').Router();
 
 
 homeController.get('/', (req, res) => {
-    res.render('home', {
-        title: 'Home Page',
-        user: req.user,
-    });
+
+    if (req.user) {
+        //user home page
+        res.render('user-home', {
+            title: 'Home Page',
+
+        });
+    } else {
+        //guest home page
+        res.render('guest-home', {
+            title: 'Home Page',
+
+        });
+    }
+
 
 });
 
