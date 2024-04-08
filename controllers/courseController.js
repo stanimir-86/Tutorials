@@ -26,7 +26,7 @@ courseController.post('/create', async (req, res) => {
         res.render('create', {
             title: 'Create Course',
             errors: parseError(err),
-            body: course,
+            body: course
         });
     }
 
