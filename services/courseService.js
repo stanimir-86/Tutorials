@@ -20,9 +20,24 @@ async function createCourse(course) {
     return Course.create(course);
 }
 
+async function deleteById(id) {
+    return Course.findByIdAndDelete(id);
+}
+async function updateById(id, data) {
+    const existing = await Course.findById(id);
+    existing.title = data.title;
+    existing.imageUrl = data.imageUrl;
+    existing.description = data.description;
+    existing.duration = data.duration;
+
+    return existing.save();
+}
+
 module.exports = {
     getAllByDate,
     createCourse,
     getRecent,
     getById,
+    deleteById,
+    updateById,
 }
