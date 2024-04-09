@@ -1,4 +1,4 @@
-const { createCourse, getById, deleteById, updateById } = require('../services/courseService.js');
+const { createCourse, getById, deleteById, updateById, enrollUser } = require('../services/courseService.js');
 const { parseError } = require('../util/parser.js');
 
 const courseController = require('express').Router();
@@ -13,7 +13,7 @@ courseController.get('/:id', async (req, res) => {
     const course = await getById(req.params.id);
 
     // course.isOwner = course.owner.toString() == req.user._id.toString();
-
+    course.enrolled = course.users.map(x => x.toString()).includes(req.user._id.toString());
     res.render('details', {
         title: course.title,
         course
@@ -70,7 +70,7 @@ courseController.post('/:id/edit', async (req, res) => {
     }
     try {
         await updateById(req.params.id, req.body);
-        
+
         res.redirect(`/course/${req.params.id}`);
     } catch (err) {
         res.render('edit', {
@@ -79,5 +79,18 @@ courseController.post('/:id/edit', async (req, res) => {
             course: req.body,
         });
     }
+});
+
+courseController.get('/:id/enroll', async (req, res) => {
+    const course = await getById(req.params.id);
+    if (course.owner.toString() != req.user._id.toString()
+        && course.users.map(x => x.toString().includes(req.user._id.toString())) == false) {
+        await enrollUser(req.params.id, req.user._id);
+
+    }
+
+
+    return res.redirect(`/course/${req.params.id}`);
+
 });
 module.exports = courseController;
