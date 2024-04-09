@@ -1,4 +1,4 @@
-const { createCourse, getAllByDate, getById } = require('../services/courseService.js');
+const { createCourse, getById } = require('../services/courseService.js');
 const { parseError } = require('../util/parser.js');
 
 const courseController = require('express').Router();
